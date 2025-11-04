@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # Step 1: Deploy L3 contracts and stake validator
+  deployer:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    container_name: l3-automaker-deployer
+    command: node /app/scripts/deploy.js
+    environment:
+      - PARENT_RPC_URL=${PARENT_RPC_URL}
+      - PARENT_CHAIN_ID=${PARENT_CHAIN_ID}
+      - DEPLOYER_PRIVATE_KEY=${DEPLOYER_PRIVATE_KEY}
+      - L3_CHAIN_ID=${L3_CHAIN_ID:-987654322}
+      - L3_CHAIN_NAME=${L3_CHAIN_NAME:-Watson L3}
+      - FORCE_INCLUDE_DELAY_SECONDS=${FORCE_INCLUDE_DELAY_SECONDS:-60}
+      - FORCE_INCLUDE_DELAY_BLOCKS=${FORCE_INCLUDE_DELAY_BLOCKS:-12}
+      - STAKE_AMOUNT=${STAKE_AMOUNT:-0.1}
+      - ROLLUP_CREATOR_ADDRESS=${ROLLUP_CREATOR_ADDRESS:-}
+    volumes:
+      - deployment-data:/data
+    networks:
+      - l3-network
+    restart: "no"
+
+  # Step 2: Initialize sequencer config from deployment
+  sequencer-init:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    container_name: l3-automaker-sequencer-init
+    command: node /app/scripts/init-sequencer.js
+    environment:
+      - DEPLOYER_PRIVATE_KEY=${DEPLOYER_PRIVATE_KEY}
+    volumes:
+      - deployment-data:/data
+    networks:
+      - l3-network
+    depends_on:
+      deployer:
+        condition: service_completed_successfully
+    restart: "no"
+
+  # Step 3: Start sequencer
+  sequencer:
+    image: offchainlabs/nitro-node:v3.2.1-d81324d
+    container_name: l3-automaker-sequencer
+    command: >
+      --node.sequencer
+      --node.dangerous.no-sequencer-coordinator
+      --execution.sequencer.enable
+      --node.batch-poster.enable
+      --node.batch-poster.max-delay=1s
+      --node.batch-poster.parent-chain-wallet.private-key=${DEPLOYER_PRIVATE_KEY}
+      --node.delayed-sequencer.enable=true
+      --node.delayed-sequencer.use-merge-finality=false
+      --node.delayed-sequencer.finalize-distance=1
+      --persistent.chain=/data/nitro
+      --http.addr=0.0.0.0
+      --http.port=${SEQUENCER_HTTP_PORT:-8547}
+      --http.vhosts=*
+      --http.corsdomain=*
+      --http.api=net,web3,eth,debug
+      --ws.addr=0.0.0.0
+      --ws.port=${SEQUENCER_WS_PORT:-8548}
+      --ws.origins=*
+      --ws.api=net,web3,eth,debug
+      --chain.id=${L3_CHAIN_ID:-987654322}
+      --parent-chain.connection.url=${PARENT_RPC_URL}
+      --chain.info-files=/config/chain-info.json
+    ports:
+      - "${SEQUENCER_HTTP_PORT:-8547}:${SEQUENCER_HTTP_PORT:-8547}"
+      - "${SEQUENCER_WS_PORT:-8548}:${SEQUENCER_WS_PORT:-8548}"
+    volumes:
+      - sequencer-data:/data/nitro
+      - deployment-data:/config:ro
+    networks:
+      - l3-network
+    depends_on:
+      sequencer-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:${SEQUENCER_HTTP_PORT:-8547}"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  # Step 4: Bootstrap and verify
+  bootstrapper:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    container_name: l3-automaker-bootstrapper
+    command: node /app/scripts/bootstrap.js
+    environment:
+      - PARENT_RPC_URL=${PARENT_RPC_URL}
+      - PARENT_CHAIN_ID=${PARENT_CHAIN_ID}
+      - DEPLOYER_PRIVATE_KEY=${DEPLOYER_PRIVATE_KEY}
+      - L3_CHAIN_ID=${L3_CHAIN_ID:-987654322}
+      - FORCE_INCLUDE_DELAY_SECONDS=${FORCE_INCLUDE_DELAY_SECONDS:-60}
+      - FORCE_INCLUDE_DELAY_BLOCKS=${FORCE_INCLUDE_DELAY_BLOCKS:-12}
+      - SEQUENCER_HTTP_PORT=${SEQUENCER_HTTP_PORT:-8547}
+      - INITIAL_DEPOSIT_AMOUNT=${INITIAL_DEPOSIT_AMOUNT:-0.01}
+    volumes:
+      - deployment-data:/data
+    networks:
+      - l3-network
+    depends_on:
+      sequencer:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  deployment-data:
+    driver: local
+  sequencer-data:
+    driver: local
+
+networks:
+  l3-network:
+    driver: bridge

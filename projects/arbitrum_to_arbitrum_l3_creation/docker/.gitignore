@@ -1,0 +1,11 @@
+# Environment files
+.env
+
+# Deployment artifacts (if extracted from volume)
+deployment.json
+bootstrap-result.json
+chain-info.json
+
+# Node modules (if testing locally)
+orchestrator/node_modules
+orchestrator/package-lock.json

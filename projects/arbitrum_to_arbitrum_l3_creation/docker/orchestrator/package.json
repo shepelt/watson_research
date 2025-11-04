@@ -1,0 +1,13 @@
+{
+  "name": "l3-automaker-orchestrator",
+  "version": "1.0.0",
+  "description": "Automated L3 deployment orchestrator",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/orchestrator.js"
+  },
+  "dependencies": {
+    "viem": "^2.21.52",
+    "dotenv": "^16.4.7"
+  }
+}
