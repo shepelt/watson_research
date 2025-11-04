@@ -1,0 +1,17 @@
+{
+  "chainId": 987654322,
+  "deployer": "0xF3Ac9af2367393d0faC75ae4d31cAe340ceb0051",
+  "stakeToken": "0xd712fa74509150b82840AcD4572150EAD3f1d231",
+  "contracts": {
+    "rollup": "0x73019d8042130e0A84beb2BFF5838B15632eE68D",
+    "inbox": "0x2c85415428DBAfC7024c6963A0ED5D37051A93B1",
+    "outbox": "0xF7fd69C64ec677Aec053Ae4002FdFbd4a71d1221",
+    "bridge": "0x16e1c495c9701884b73517e894eda1F5ac9923Be",
+    "sequencerInbox": "0x9fa75916B359eA82f36F0A18B5A38434e3B2c184",
+    "challengeManager": "0x237D4b19B938e69994D184c1C130bC194ce4Fa7C",
+    "rollupEventInbox": "0xBB53EC14429C9aab9F443efbC5d9EF0eA030100B",
+    "upgradeExecutor": "0xdE2532f1E64046933143b47eD4248eBF477809E4",
+    "validatorWalletCreator": "0xAe6c6Da8406f6efa865C887F55Da4CEaB1F4865b"
+  },
+  "deployedAt": 1873
+}

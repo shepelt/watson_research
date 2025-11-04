@@ -1,0 +1,24 @@
+{
+  "name": "arbitrum-l3-deployment",
+  "version": "1.0.0",
+  "description": "Deploy Arbitrum Orbit L3 with custom force-include delay",
+  "type": "module",
+  "scripts": {
+    "deploy": "tsx scripts/deploy-l3-fast-delay.ts",
+    "stake": "tsx scripts/stake-validator-v2.ts",
+    "deposit": "tsx scripts/deposit-to-l3-v2.ts",
+    "test": "tsx scripts/test-l3-tx.ts",
+    "spam-blocks": "tsx scripts/spam-l2-blocks.ts"
+  },
+  "dependencies": {
+    "viem": "^2.21.52",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

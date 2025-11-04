@@ -1,0 +1,36 @@
+{
+  "network": "HPP Sepolia",
+  "chainId": 181228,
+  "deploymentDate": "2025-11-05",
+  "contracts": {
+    "RollupCreator": "0x0A1da8a4Df1C3d1591B4A9E34Ed508dE5c537977",
+    "BridgeCreator": "0x724Bae7A07610B946026b91937e19F28d2dF1d19",
+    "EdgeChallengeManager": "0x5984dE8827d12EC16248a86fc9143f8166d251e6",
+    "RollupAdminLogic": "0xAe6824f80a49383c28DeF375b9206b270e46eCE7",
+    "RollupUserLogic": "0xfFd2893144006b7D8576809F5e2E9DBa36ba5174",
+    "ValidatorWalletCreator": "0xAe6c6Da8406f6efa865C887F55Da4CEaB1F4865b",
+    "DeployHelper": "0xe2EBe9C096e5C2a02eb6eB5a96D7f34E8D78ac6C",
+    "RollupProxy": "0xaF3733dE8fb197F025c198cfF4c549E7e0E3Fb0E",
+    "OneStepProofEntry": "0x7C653Be937d79706e765a80779354CE978Dd7547",
+    "OneStepProver0": "0x8234608Cd963590bDE1240c17B334F9a348D144e",
+    "OneStepProverMemory": "0x86430e8280878648C234E60e06B54daCC2E3b6a6",
+    "OneStepProverMath": "0x39aFa91b5E89849887480Eeb9FCF7bbAB0439F5f",
+    "OneStepProverHostIo": "0x467D40A486Ece1FbE3Ab01E50F4b1E1874Cea40c"
+  },
+  "bridgeTemplates": {
+    "Bridge": "0x097ef8507FAAeafef77aAa1B4651d68c5aCac72C",
+    "SequencerInbox": "0xb0798048aa97E6901e5eEB765226CcFC9E809DF7",
+    "SequencerInboxHostChained": "0x4ebb9Dc818b0f2d6dc3d437435aACE4C9689c3dd",
+    "Inbox": "0x5a51cE8055e4189EbC3B94F6730680bCe40E5926",
+    "RollupEventInbox": "0xd5657221bA2133F48Fd0E5d8d1BcA40afeCeabF7",
+    "Outbox": "0xcCBC55EE0Ca79edef87485Fd68B30080036CEAE2",
+    "ERC20Bridge": "0xE441601c24f405340567c83e78a95279B180eC8b",
+    "ERC20SequencerInbox": "0x57E7090a0A4B9cE376650406d7bda5567dd01861",
+    "ERC20SequencerInboxHostChained": "0xafF1186Cd149828c4a7094151162014bAC9edC92",
+    "ERC20Inbox": "0x5Ab8c652761Cea4F418992c649881DD73189174e",
+    "ERC20RollupEventInbox": "0x5b732C7d2CFFf4ab3285d33a5a4706Af5DE7B7CD",
+    "ERC20Outbox": "0xDA9b78EF791E10739Ef369F3C78d9bfEFE781A55"
+  },
+  "status": "deployed",
+  "notes": "All factory contracts deployed successfully. Template set on RollupCreator. Ready for L3 deployment."
+}
